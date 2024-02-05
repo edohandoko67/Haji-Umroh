@@ -59,8 +59,8 @@ class HomeActivity : AppCompatActivity() {
                 val selectedDate =
                     selectedYear.toString() + "-" + (selectedMonth + 1) + "-" + selectedDay
                 binding.date.setText(selectedDate)
-                binding.call.setFocusable(true)
-                binding.date.setClickable(true)
+                binding.call.isFocusable = true
+                binding.date.isClickable = true
             },
             year, month, day
         )
