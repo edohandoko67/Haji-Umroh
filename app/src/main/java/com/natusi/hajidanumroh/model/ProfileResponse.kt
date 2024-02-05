@@ -22,7 +22,7 @@ data class ProfileResponse(
     @SerializedName("code")
     var code: Int,
     @SerializedName("data")
-    var profileResponse: List<ProfileResponse>? = null
+    var profileResponse: List<ProfileResponse>
 
 ) {
     constructor():

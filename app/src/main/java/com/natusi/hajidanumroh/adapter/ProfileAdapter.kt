@@ -11,7 +11,7 @@ import com.natusi.hajidanumroh.R
 import com.natusi.hajidanumroh.model.ProfileResponse
 import com.squareup.picasso.Picasso
 
-class Adapter(val mCtx: Context, val userList: List<ProfileResponse>) : RecyclerView.Adapter<Adapter.Holder>() {
+class ProfileAdapter(val mCtx: Context, val userList: List<ProfileResponse>) : RecyclerView.Adapter<ProfileAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.profile_item, parent, false)
         return Holder(view)
@@ -28,7 +28,7 @@ class Adapter(val mCtx: Context, val userList: List<ProfileResponse>) : Recycler
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return userList.size
     }
 
     class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
