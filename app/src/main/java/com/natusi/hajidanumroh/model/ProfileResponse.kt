@@ -4,24 +4,30 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileResponse(
     @SerializedName("nama_perusahaan")
-    private val namaPerusahaan: String,
+    var namaPerusahaan: String,
     @SerializedName("logo_perusahaan")
-    private val logo: String,
+    var logo: String,
     @SerializedName("alamat")
-    private val alamat: String,
+    var alamat: String,
     @SerializedName("no_telepon")
-    private val noTelp: String,
+    var noTelp: String,
     @SerializedName("email")
-    private val email: String,
+    var email: String,
     @SerializedName("alamat_website")
-    private val alamatWebsite: String,
+    var alamatWebsite: String,
     @SerializedName("profile_singkat_perusahaan")
-    private val profile: String,
+    var profile: String,
     @SerializedName("status")
-    private val status: String,
+    var status: String,
     @SerializedName("code")
-    private val code: Int,
+    var code: Int,
     @SerializedName("data")
-    private var profileResponse: List<ProfileResponse>? = null
+    var profileResponse: List<ProfileResponse>? = null
 
-)
+) {
+    constructor():
+            this("","","","","","","",
+                "",0, ArrayList()){
+
+            }
+}
