@@ -3,11 +3,13 @@ package com.natusi.hajidanumroh.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract.RawContacts.Data
 import android.util.Log
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +24,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
-
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -32,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var paketList: MutableList<HomeActivity>
     lateinit var recyclerView: RecyclerView
     lateinit var paketAdapter: PaketAdapter
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -52,10 +56,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, WebActivity::class.java ))
         }
 
-//        setInitialDate()
-//        binding.date.setOnClickListener {
-//            saveDate()
-//        }
+        setInitialDate()
+        binding.date.setOnClickListener {
+            saveDate()
+        }
 
         fetchDataAPI()
     }
@@ -87,15 +91,17 @@ class HomeActivity : AppCompatActivity() {
         paketAdapter.notifyDataSetChanged()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setInitialDate() {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val currentDate = dateFormat.format(calendar.time)
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = LocalDate.now().format(dateFormatter)
 
         binding.date.setText(currentDate)
-        Log.d("date:", currentDate.toString())
+        Log.d("date:", currentDate)
     }
 
     private fun saveDate() {
+        val calendar = Calendar.getInstance()
         val year: Int = calendar.get(Calendar.YEAR)
         val month: Int = calendar.get(Calendar.MONTH)
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
@@ -104,7 +110,7 @@ class HomeActivity : AppCompatActivity() {
             this,
             { view: DatePicker?, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
                 val selectedDate =
-                    selectedYear.toString() + "-" + (selectedMonth + 1) + "-" + selectedDay
+                    "$selectedYear-${selectedMonth + 1}-$selectedDay"
                 binding.date.setText(selectedDate)
                 binding.call.isFocusable = true
                 binding.date.isClickable = true
@@ -113,6 +119,7 @@ class HomeActivity : AppCompatActivity() {
         )
         datePickerDialog.show()
     }
+
 
     private fun sendToCall() {
         val telepon = "+62895342642087"
