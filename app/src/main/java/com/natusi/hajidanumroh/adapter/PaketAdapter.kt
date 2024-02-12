@@ -1,13 +1,17 @@
 package com.natusi.hajidanumroh.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.natusi.hajidanumroh.R
+import com.natusi.hajidanumroh.auth.ApiClient.URL_IMAGE
 import com.natusi.hajidanumroh.model.DataPaket
+import com.natusi.hajidanumroh.ui.ShowActivity
 import com.squareup.picasso.Picasso
 
 class PaketAdapter(val ctx: Context, val paketList: List<DataPaket>) : RecyclerView.Adapter<PaketAdapter.Holder>() {
@@ -17,8 +21,15 @@ class PaketAdapter(val ctx: Context, val paketList: List<DataPaket>) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val imgUrl = "192.168.2.111/develop/KBIHU_Al-Rahmah/public/api/paket-umroh"
+        val (_, image) = paketList[position]
+        holder.imgLogo.setOnClickListener {
+            val intent = Intent(ctx, ShowActivity::class.java)
+            intent.putExtra("image", image)
+            ctx.startActivity(intent)
+        }
+        val imgUrl = "$URL_IMAGE$image"
         Picasso.get().load(imgUrl).into(holder.imgLogo)
+        Log.d("image url show:", imgUrl)
     }
 
     override fun getItemCount(): Int {

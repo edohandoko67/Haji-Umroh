@@ -1,29 +1,25 @@
 package com.natusi.hajidanumroh.ui
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract.RawContacts.Data
 import android.util.Log
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.natusi.hajidanumroh.adapter.PaketAdapter
-import com.natusi.hajidanumroh.adapter.ProfileAdapter
 import com.natusi.hajidanumroh.auth.API
 import com.natusi.hajidanumroh.auth.ApiClient
 import com.natusi.hajidanumroh.databinding.ActivityHomeBinding
 import com.natusi.hajidanumroh.model.DataPaket
-import com.natusi.hajidanumroh.model.ProfileResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -32,7 +28,6 @@ import java.util.Locale
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var calendar: Calendar
-    lateinit var paketList: MutableList<HomeActivity>
     lateinit var recyclerView: RecyclerView
     lateinit var paketAdapter: PaketAdapter
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,25 +60,23 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun fetchDataAPI() {
-        val apis = ApiClient.getRetrofitInstance()!!.create(API::class.java)
-        Log.d("response paket", apis.getDataPaket().toString());
-        val call: Call<DataPaket> = apis.getDataPaket()
-        call.enqueue(object : Callback<DataPaket> {
-            override fun onResponse(call: Call<DataPaket>, response: Response<DataPaket>) {
-                if (response.isSuccessful() && response.body() != null) {
-                    response.body()!!.paket.let {
-                        generateDataList(it)
-                    }
+        val apis = ApiClient.getRetrofitInstance()?.create(API::class.java)
+        val call: Call<DataPaket?>? = apis?.getDataPaket()
+        call!!.enqueue(object : Callback<DataPaket?> {
+            override fun onResponse(call: Call<DataPaket?>, response: Response<DataPaket?>) {
+                if (response.isSuccessful && response.body() != null) {
+                    generateDataList(response.body()!!.paket)
+                    Log.d("data paket:", response.body().toString())
                 }
             }
 
-            override fun onFailure(call: Call<DataPaket>, t: Throwable) {
-                Toast.makeText(applicationContext,t.toString(), Toast.LENGTH_LONG).show()
+            override fun onFailure(call: Call<DataPaket?>, t: Throwable) {
+                Log.d("errornya apa: ", t.message!!)
             }
-
         })
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun generateDataList(dataList: List<DataPaket>) {
         paketAdapter = PaketAdapter(this, dataList)
         recyclerView.adapter = paketAdapter

@@ -11,6 +11,6 @@ interface API {
     fun getProfile(): Call<ProfileResponse>
 
     @GET("develop/KBIHU_Al-Rahmah/public/api/paket-umroh")
-    fun getDataPaket(): Call<DataPaket>
+    fun getDataPaket(): Call<DataPaket?>?
 
 }
